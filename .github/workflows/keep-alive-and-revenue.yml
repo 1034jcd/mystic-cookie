@@ -36,11 +36,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install deps
-        run: npx --yes pnpm@9 install --frozen-lockfile --ignore-scripts --prod --no-audit --no-fund
+        run: |
+          mkdir -p /tmp/revenue-deps
+          npm install --prefix /tmp/revenue-deps nodemailer --no-save --no-audit --no-fund
       - name: Send daily revenue report
         env:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           REPORT_TO: ${{ secrets.ADMIN_EMAIL }}
-        run: node scripts/revenue-report.js
+        run: NODE_PATH=/tmp/revenue-deps/node_modules node scripts/revenue-report.js
