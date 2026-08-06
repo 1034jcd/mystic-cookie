@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Sparkles, Infinity as InfinityIcon, CalendarDays, AlertTriangle } from "lucide-react";
+import { Loader2, Sparkles, Infinity as InfinityIcon, CalendarDays, AlertTriangle, Lock, ShieldCheck, HeartHandshake } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -115,6 +115,21 @@ export function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
             <p className="text-center text-xs text-muted-foreground">
               Cancel anytime. Secure checkout via Stripe.
             </p>
+
+            <div className="w-full grid grid-cols-3 gap-2 pt-1 border-t border-border/40">
+              <div className="text-center">
+                <Lock className="w-4 h-4 mx-auto text-muted-foreground mb-1" />
+                <span className="text-[10px] text-muted-foreground leading-tight block">Secure Stripe checkout</span>
+              </div>
+              <div className="text-center">
+                <ShieldCheck className="w-4 h-4 mx-auto text-muted-foreground mb-1" />
+                <span className="text-[10px] text-muted-foreground leading-tight block">Instant unlock</span>
+              </div>
+              <div className="text-center">
+                <HeartHandshake className="w-4 h-4 mx-auto text-muted-foreground mb-1" />
+                <span className="text-[10px] text-muted-foreground leading-tight block">Love it or refund</span>
+              </div>
+            </div>
           </div>
         </div>
       </DialogContent>

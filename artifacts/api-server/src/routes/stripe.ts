@@ -1,7 +1,17 @@
 import { Router } from "express";
 import Stripe from "stripe";
+import rateLimit from "express-rate-limit";
 
 const router = Router();
+
+const checkoutLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) =>
+    req.headers["x-forwarded-for"]?.toString() || req.ip || "anon",
+});
 
 const secretKey = process.env["STRIPE_SECRET_KEY"] ?? "";
 const webhookSecret = process.env["STRIPE_WEBHOOK_SECRET"] ?? "";
@@ -41,7 +51,7 @@ function log(
 }
 
 // ── Create a Stripe Checkout session ──────────────────────────────────────────
-router.post("/stripe/checkout", async (req, res) => {
+router.post("/stripe/checkout", checkoutLimiter, async (req, res) => {
   const { mode } = (req.body ?? {}) as { mode?: "single" | "monthly" | "yearly" };
   let isSubscription = false;
   let price = priceSingle;

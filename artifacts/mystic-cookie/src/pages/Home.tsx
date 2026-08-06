@@ -15,7 +15,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Share2, BookmarkPlus, Sparkles, ScrollText, MoonStar, Zap, Info, Volume2, VolumeX } from "lucide-react";
+import { Share2, BookmarkPlus, Sparkles, ScrollText, MoonStar, Zap, Info, Volume2, VolumeX, MessageCircle, Twitter, Facebook } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -133,6 +133,22 @@ export default function Home() {
       title: "Copied to parchment",
       description: "Fortune copied to clipboard.",
     });
+  };
+
+  const fortuneShareText = () =>
+    currentFortune
+      ? `The Oracle says: "${currentFortune.text}" ✨ Lucky Numbers: ${currentFortune.luckyNumbers.join(", ")} — cracked at Mystic Cookie 🥠`
+      : "Crack open your fortune at Mystic Cookie 🥠";
+
+  const shareTo = (platform: "whatsapp" | "x" | "facebook") => {
+    const text = encodeURIComponent(fortuneShareText());
+    const url = encodeURIComponent(window.location.origin);
+    const targets: Record<string, string> = {
+      whatsapp: `https://wa.me/?text=${text}%20${url}`,
+      x: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`,
+    };
+    window.open(targets[platform], "_blank", "noopener,noreferrer");
   };
 
   const handleSave = () => {
@@ -301,6 +317,15 @@ export default function Home() {
               <Button variant="outline" className="border-primary/50 text-primary hover:bg-primary/10" onClick={handleShare}>
                 <Share2 className="w-4 h-4 mr-2" /> Share
               </Button>
+              <Button variant="outline" size="sm" className="border-primary/40 text-primary hover:bg-primary/10 px-2" onClick={() => shareTo("whatsapp")} title="Share on WhatsApp">
+                <MessageCircle className="w-4 h-4" />
+              </Button>
+              <Button variant="outline" size="sm" className="border-primary/40 text-primary hover:bg-primary/10 px-2" onClick={() => shareTo("x")} title="Share on X">
+                <Twitter className="w-4 h-4" />
+              </Button>
+              <Button variant="outline" size="sm" className="border-primary/40 text-primary hover:bg-primary/10 px-2" onClick={() => shareTo("facebook")} title="Share on Facebook">
+                <Facebook className="w-4 h-4" />
+              </Button>
             </div>
             
             <Button 
@@ -357,7 +382,7 @@ export default function Home() {
                   }}
                 >
                   <Zap className="w-5 h-5 mr-2" />
-                  Crack a Fortune ($0.99)
+                  Crack a Fortune ($1.99)
                 </Button>
                 
                 <Button 
@@ -370,7 +395,7 @@ export default function Home() {
                   }}
                 >
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Unlimited Monthly ($4.99)
+                  Unlimited — $4.99/mo
                 </Button>
               </>
             ) : (
