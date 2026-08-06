@@ -1,0 +1,105 @@
+import { Router } from "express";
+import Stripe from "stripe";
+
+const router = Router();
+
+const secretKey = process.env["STRIPE_SECRET_KEY"] ?? "";
+const webhookSecret = process.env["STRIPE_WEBHOOK_SECRET"] ?? "";
+const priceSingle = process.env["STRIPE_PRICE_SINGLE"] ?? "";
+const priceMonthly = process.env["STRIPE_PRICE_MONTHLY"] ?? "";
+
+const stripe = new Stripe(secretKey);
+
+function getBaseUrl(req: {
+  headers: Record<string, string | string[] | undefined>;
+}): string {
+  const configured =
+    process.env["PUBLIC_BASE_URL"] ?? process.env["BASE_URL"] ?? process.env["REPLIT_DOMAINS"];
+  if (configured && configured.startsWith("http")) return configured.replace(/\/+$/, "");
+  if (configured) return `https://${configured.split(",")[0]?.trim()}`;
+  const host = req.headers["host"];
+  if (host) return `https://${String(host)}`;
+  return "https://mystic-cookie.onrender.com";
+}
+
+function log(
+  req: { log?: unknown },
+  msg: string,
+  extra?: Record<string, unknown>,
+) {
+  const logger = (
+    req as {
+      log?: { info?: (obj: unknown, m?: string) => void; error?: (obj: unknown, m?: string) => void };
+    }
+  ).log;
+  try {
+    logger?.info?.(extra ?? {}, msg);
+  } catch {
+    // logging is best-effort
+  }
+}
+
+// ── Create a Stripe Checkout session ──────────────────────────────────────────
+router.post("/stripe/checkout", async (req, res) => {
+  const { mode } = (req.body ?? {}) as { mode?: "single" | "monthly" };
+  const isMonthly = mode === "monthly";
+  const price = isMonthly ? priceMonthly : priceSingle;
+
+  if (!secretKey) {
+    res.status(500).json({ ok: false, message: "Payments are not configured yet." });
+    return;
+  }
+  if (!price) {
+    res.status(500).json({ ok: false, message: "No price configured for this option." });
+    return;
+  }
+
+  const baseUrl = getBaseUrl(req);
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: isMonthly ? "subscription" : "payment",
+      line_items: [{ price, quantity: 1 }],
+      success_url: `${baseUrl}/paid?session_id={CHECKOUT_SESSION_ID}&mode=${isMonthly ? "monthly" : "single"}`,
+      cancel_url: `${baseUrl}/`,
+      metadata: { app: "mystic-cookie", mode: isMonthly ? "monthly" : "single" },
+    });
+    res.json({ ok: true, url: session.url });
+  } catch (err) {
+    log(req, "Failed to create Stripe checkout session", { err: String(err) });
+    res.status(500).json({ ok: false, message: "Could not start checkout. Try again." });
+  }
+});
+
+// ── Stripe webhook (payment confirmations) ────────────────────────────────────
+router.post("/stripe/webhook", async (req, res) => {
+  const signature = req.headers["stripe-signature"] as string | undefined;
+  const rawBody = (req as unknown as { rawBody?: Buffer }).rawBody;
+
+  if (!webhookSecret || !signature || !rawBody) {
+    res.status(400).json({ error: "Missing webhook signature or body" });
+    return;
+  }
+
+  let event: Stripe.Event;
+  try {
+    event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+  } catch (err) {
+    log(req, "Stripe webhook signature verification failed", { err: String(err) });
+    res.status(400).json({ error: "Invalid signature" });
+    return;
+  }
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    log(req, "Stripe payment completed", {
+      sessionId: session.id,
+      mode: session.mode,
+      amountTotal: session.amount_total,
+      customer: session.customer,
+    });
+  }
+
+  res.json({ received: true });
+});
+
+export default router;

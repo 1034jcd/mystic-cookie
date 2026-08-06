@@ -1,0 +1,331 @@
+I need you to build a complete, production-ready mystical fortune cookie web app
+called "Mystic Cookie" with Chime payment integration. Build everything from
+scratch including all files.
+
+# TECH STACK
+- Backend: Node.js + Express
+- Frontend: Single HTML page with embedded CSS and JavaScript                         - Packages needed: express, qrcode, nodemailer
+- No frameworks (no React, no Vue, just vanilla JS)
+- PWA installable (service worker + manifest)
+
+# ENVIRONMENT VARIABLES (Set these as Secrets in Replit)
+Add these 4 secrets in the Secrets tab (lock icon):
+
+Secret 1:
+Key: CHIME_SIGNUP
+Value: $jduvall
+
+Secret 2:
+Key: CHIME_ROUTING
+Value: <REDACTED>
+
+Secret 3:
+Key: CHIME_ACCOUNT
+Value: <REDACTED>
+
+Secret 4:
+Key: GMAIL_APP_PASSWORD
+Value: <REDACTED>
+
+Also add these:
+
+Secret 5:
+Key: GMAIL_USER
+Value: 1034jcd@gmail.com
+
+Secret 6:
+Key: OWNER_EMAIL
+Value: 1034jcd@gmail.com
+
+# REQUIRED FILES TO CREATE
+
+## 1. package.json
+```json
+{
+  "name": "mystic-cookie",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "qrcode": "^1.5.3",
+    "nodemailer": "^6.9.0"
+  }
+}
+```
+
+## 2. index.js (Backend Server)
+Create a complete Express server that:                                                - Serves static files from 'public' folder
+- Has POST endpoint /api/payment/chime that returns payment details with
+$jduvall
+- Has GET endpoint /qr/:amount that generates QR code for Chime payment
+- Has POST endpoint /api/verify-payment that sends email notification to
+1034jcd@gmail.com
+- Has GET endpoint /api/fortunes that returns fortunes from fortunes.json
+- Listens on port 3000 or process.env.PORT
+- Uses the 4 environment variables above
+
+The payment endpoint should return:
+```json
+{
+  "method": "chime",
+  "amount": "0.99",
+  "chimeSignup": "$jduvall",
+  "payUrl": "https://chime.me/r/$jduvall?amount=0.99",
+  "qrUrl": "/qr/0.99",
+  "instructions": [
+    "1. Open Chime app",
+    "2. Tap Pay Anyone",
+    "3. Send $0.99 to $jduvall",
+    "4. Add note: Mystic Fortune",
+    "5. Return here and tap I Paid"
+  ]
+}
+```
+
+The verify-payment endpoint should:
+- Accept payment details
+- Send email using nodemailer with GMAIL_USER and GMAIL_APP_PASSWORD
+- Email goes to OWNER_EMAIL (1034jcd@gmail.com)
+- Email subject: "💰 New Mystic Cookie Payment - $X.XX"
+- Email body includes payment amount, time, method
+
+## 3. fortunes.json (in public folder)
+Create 30+ fortunes in this format:
+```json
+[
+  {
+    "text": "The dragon awakens within you — greatness follows your every
+step.",
+    "lucky": "Lucky Numbers: 7, 14, 28",
+    "category": "wisdom"
+  },
+  {
+    "text": "A river of jade flows toward you — abundance approaches in
+silence.",
+    "lucky": "Lucky Numbers: 3, 19, 42",
+    "category": "wealth"
+  },
+  ... (add 30+ total covering all 5 categories: love, career, health, wealth,
+wisdom)
+]
+```
+
+## 4. public/index.html (Main App)
+Create a complete single-page HTML app with this design:
+
+# DESIGN REQUIREMENTS
+- Dark mystical theme
+- Colors: Gold (#d4af74), Jade (#00d4a8), Vermillion (#c73e3a), Dark (#0a0a1a)
+- Fonts: Import "Ma Shan Zheng" and "Cinzel Decorative" from Google Fonts
+- Animated floating gold particles in background
+- 3D-styled golden cookie using CSS gradients (radial-gradient)
+- Sound effects using Web Audio API (crack sound, mystical chimes)
+- Mobile responsive
+- PWA installable
+
+# LAYOUT
+1. Loading screen with Chinese character "命" that fades out after 1 second
+2. Main app container:
+   - Top: Chinese title "金餅" with "Golden Cookie" subtitle
+   - Middle: Large circular golden cookie with Chinese character "福" in center
+   - Bottom: "Crack Cookie - $0.99" button (gold gradient)
+   - Below: "My Collection" button (jade outline)
+   - Stats bar showing: Cookies, Spent, Streak
+3. Fortune reveal modal:
+   - Parchment scroll design (gradient background, gold border)
+   - Fortune text (italic, serif font, dark brown color)
+   - Lucky numbers below
+   - Share button
+4. Payment modal (CRITICAL):
+   - Shows "$jduvall" prominently
+   - QR code (loaded from /qr/0.99 endpoint)
+   - Instructions: "Open Chime app → Pay Anyone → Send to $jduvall → $0.99 →
+Note: Mystic Fortune"
+   - "I Paid - Reveal Fortune" button (green)
+   - "Cancel" button
+5. Collection modal:
+   - List of saved fortunes
+   - Export button
+6. Sound toggle button (top right)
+
+# FUNCTIONALITY
+
+## Audio System (Web Audio API)
+- playTone(freq, duration, type, volume) function
+- playCrack() - plays 3 tones for cracking sound
+- playReveal() - plays mystical chimes (C, E, G notes)
+- playPurchase() - plays coin sound
+- Toggle sound on/off
+
+## Particles
+- 30 floating gold particles with random sizes, positions, animation durations
+
+## Fortune Generation
+- Load fortunes from /api/fortunes
+- Filter by selected category (love, career, health, wealth, wisdom)
+- Random selection when cookie is cracked
+- Crack animation (scale + rotate)
+- Coin particles falling
+- Fortune reveal animation (scale up + fade in)
+
+## Payment Flow
+1. User clicks "Crack Cookie" button
+2. Call /api/payment/chime to get payment details
+3. Show payment modal with QR code and $jduvall info
+4. User pays via Chime (outside app)
+5. User clicks "I Paid" button
+6. Call /api/verify-payment to log payment and send email
+7. Reveal fortune
+8. Save to collection in localStorage
+
+## Collection
+- Save fortune + date + category to localStorage
+- Display in modal with export functionality
+- Export as text file
+
+## Stats
+- Track total cookies cracked
+- Track total spent ($0.99 per fortune)
+- Track daily streak
+- Update in real-time
+
+## PWA
+- Create manifest.json with name, icons, theme color
+- Create service-worker.js for offline support
+- Add manifest link to HTML
+
+# SPECIFIC CODE SECTIONS NEEDED                                                       
+## Payment Modal HTML (must include)
+```html
+<div class="payment-modal">
+  <div class="amount-display">$0.99</div>
+  <img src="/qr/0.99" alt="QR Code">
+  <div class="chime-signup">$jduvall</div>
+  <div class="instructions">
+    Open Chime app → Pay Anyone → $jduvall → $0.99 → Note: "Mystic Fortune"
+  </div>
+  <button onclick="confirmPayment()">✓ I Paid - Reveal Fortune</button>
+  <button onclick="closePayment()">Cancel</button>
+</div>
+```
+
+## Cookie Styling (3D effect)
+```css
+.cookie {
+  background: radial-gradient(circle at 30% 30%, #f5d896, #d4a574 40%, #a67c52
+70%, #6b4423);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow:
+    inset -20px -20px 40px rgba(0,0,0,0.4),
+    inset 10px 10px 20px rgba(255,255,255,0.2),
+    0 20px 60px rgba(212,175,116,0.4);
+}
+```
+
+# DEPLOYMENT
+After building all files:
+1. Run npm install to install dependencies
+2. Make sure all 6 secrets are set in Replit Secrets tab
+3. Test the app runs (click Run button)
+4. Verify payment flow works
+5. Verify email notifications send to 1034jcd@gmail.com
+
+# IMPORTANT NOTES
+- ALL payments go to $jduvall Chime (routing <REDACTED>, account <REDACTED>)
+- NO Stripe, NO PayPal, NO third-party processors
+- Email notifications go to 1034jcd@gmail.com
+- Must work on mobile (PWA)
+- Must look mystical and beautiful
+- Must handle errors gracefully
+
+Build this complete app now. Create all necessary files, install dependencies,
+and make it production-ready.
+```
+
+---
+
+## 📋 HOW TO USE THIS
+
+**Steps:**
+
+1. **Copy everything above** (from "I need you to build..." to
+"...production-ready")
+
+2. **Open Replit AI** (in your Mystic Cookie project)
+
+3. **Paste it all** into the AI chat
+
+4. **Press Enter / Send**
+
+5. **Wait 2-5 minutes** while Replit AI:
+   - Creates all files
+   - Installs packages
+   - Sets up secrets
+   - Tests everything
+
+6. **When done, click Run** if it hasn't already
+
+7. **Open your live URL** to test
+
+---
+
+## ⚠️ IMPORTANT ABOUT THE SECRETS
+
+**After Replit AI is done building, MANUALLY verify the 6 secrets are set:**
+
+1. Click **"Secrets" tab** (lock icon 🔒) in left sidebar
+2. Make sure these 6 are there:
+   - `CHIME_SIGNUP` = `$jduvall`
+   - `CHIME_ROUTING` = `<REDACTED>`
+   - `CHIME_ACCOUNT` = `<REDACTED>`
+   - `GMAIL_APP_PASSWORD` = `<REDACTED>`
+   - `GMAIL_USER` = `1034jcd@gmail.com`
+   - `OWNER_EMAIL` = `1034jcd@gmail.com`
+
+**If any are missing, add them manually!**
+
+---
+
+## 🎯 AFTER REPLIT AI FINISHES
+
+**Do these 3 things:**
+
+1. ✅ **Verify 6 secrets are set** (check Secrets tab)
+2. ✅ **Click Run button** (if not already running)
+3. ✅ **Open your live URL** in new tab
+4. ✅ **Test payment flow:**
+   - Click "Crack Cookie"
+   - See QR code
+   - See $jduvall displayed
+   - Click "I Paid" to test email notification
+
+---
+
+## 📧 TELL ME WHEN DONE:
+
+**Reply with:**
+
+✅ **"Done! URL works and shows $jduvall!"** → 🎉 We celebrate + start
+marketing!
+
+❌ **"Replit AI is still building..."** → I wait with you
+
+❌ **"Error: [error message]"** → I help fix
+
+❓ **"Can't find Secrets tab"** → I guide you
+
+---
+
+## 💚 THIS PROMPT HAS EVERYTHING
+
+- ✅ Exact tech stack
+- ✅ All 6 secrets
+- ✅ Complete file structure
+- ✅ Design specs
+- ✅ Functionality requirements
+- ✅ Payment flow details
+- ✅ Email setup
+- ✅ Deployment steps

@@ -1,0 +1,304 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Mystic Cookie API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: fortune
+    description: Fortune cookie operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /fortune/random:
+    get:
+      operationId: getRandomFortune
+      tags: [fortune]
+      summary: Get a random fortune
+      description: Returns a random fortune, optionally filtered by category
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [Love, Career, Health, Wealth, Wisdom]
+      responses:
+        "200":
+          description: A fortune
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Fortune"
+  /fortune/daily:
+    get:
+      operationId: getDailyFortune
+      tags: [fortune]
+      summary: Get today's daily free fortune
+      description: Returns the daily fortune (one per calendar day, free)
+      responses:
+        "200":
+          description: Today's fortune
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Fortune"
+  /fortune/categories:
+    get:
+      operationId: getFortuneCategories
+      tags: [fortune]
+      summary: List all fortune categories
+      responses:
+        "200":
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FortuneCategory"
+  /fortune/weekly:
+    get:
+      operationId: getWeeklyFortune
+      tags: [fortune]
+      summary: Get the oracle's Fortune of the Week
+      description: Returns the same special fortune for everyone in the current ISO week. Changes every Monday.
+      responses:
+        "200":
+          description: This week's oracle fortune
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeeklyFortune"
+  /fortune/verify-payment:
+    post:
+      operationId: verifyPayment
+      tags: [fortune]
+      summary: Submit payment claim — creates a pending token awaiting owner approval
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyPaymentRequest"
+      responses:
+        "200":
+          description: Pending token created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifyPaymentAck"
+  /fortune/check-token:
+    get:
+      operationId: checkPaymentToken
+      tags: [fortune]
+      summary: Poll whether owner has approved a pending payment token
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Token status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenStatus"
+  /fortune/qrcode:
+    get:
+      operationId: getChimeQrCode
+      tags: [fortune]
+      summary: Generate Chime QR code for payment
+      parameters:
+        - name: amount
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: ["0.99", "4.99"]
+      responses:
+        "200":
+          description: QR code data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChimePayment"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    Fortune:
+      type: object
+      properties:
+        id:
+          type: integer
+        text:
+          type: string
+        category:
+          type: string
+        luckyNumbers:
+          type: array
+          items:
+            type: integer
+        date:
+          type: string
+      required:
+        - id
+        - text
+        - category
+        - luckyNumbers
+        - date
+    FortuneCategory:
+      type: object
+      properties:
+        name:
+          type: string
+        count:
+          type: integer
+        emoji:
+          type: string
+      required:
+        - name
+        - count
+        - emoji
+    WeeklyFortune:
+      type: object
+      properties:
+        id:
+          type: integer
+        text:
+          type: string
+        category:
+          type: string
+        luckyNumbers:
+          type: array
+          items:
+            type: integer
+        weekNumber:
+          type: integer
+        weekLabel:
+          type: string
+        expiresAt:
+          type: string
+      required:
+        - id
+        - text
+        - category
+        - luckyNumbers
+        - weekNumber
+        - weekLabel
+        - expiresAt
+    VerifyPaymentRequest:
+      type: object
+      properties:
+        amount:
+          type: string
+        method:
+          type: string
+        note:
+          type: string
+        mathAnswer:
+          type: number
+        mathChallenge:
+          type: object
+          properties:
+            a:
+              type: number
+            b:
+              type: number
+            text:
+              type: string
+      required:
+        - amount
+        - method
+        - note
+        - mathAnswer
+        - mathChallenge
+    VerifyPaymentAck:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        message:
+          type: string
+        pending:
+          type: boolean
+        token:
+          type: string
+      required:
+        - ok
+        - message
+    TokenStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, approved, expired, invalid]
+      required:
+        - status
+    ChimePayment:
+      type: object
+      properties:
+        qrCodeDataUrl:
+          type: string
+        chimeTag:
+          type: string
+        amount:
+          type: string
+        instructions:
+          type: string
+        mathChallenge:
+          type: object
+          properties:
+            a:
+              type: number
+            b:
+              type: number
+            text:
+              type: string
+          required:
+            - a
+            - b
+            - text
+      required:
+        - qrCodeDataUrl
+        - chimeTag
+        - amount
+        - instructions
+        - mathChallenge
+    MathChallenge:
+      type: object
+      properties:
+        a:
+          type: number
+        b:
+          type: number
+        text:
+          type: string
+      required:
+        - a
+        - b
+        - text

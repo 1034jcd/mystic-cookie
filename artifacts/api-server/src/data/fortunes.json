@@ -1,0 +1,221 @@
+{
+  "fortunes": [
+    {
+      "id": 1,
+      "text": "A passionate encounter will ignite your heart and soul.",
+      "category": "Love",
+      "luckyNumbers": [7, 14, 21, 28, 35]
+    },
+    {
+      "id": 2,
+      "text": "The one who holds your hand also holds the key to your future.",
+      "category": "Love",
+      "luckyNumbers": [3, 9, 18, 27, 36]
+    },
+    {
+      "id": 3,
+      "text": "Love blooms where patience and kindness are planted.",
+      "category": "Love",
+      "luckyNumbers": [1, 11, 22, 33, 44]
+    },
+    {
+      "id": 4,
+      "text": "A connection long sought is closer than the stars above.",
+      "category": "Love",
+      "luckyNumbers": [5, 15, 25, 35, 45]
+    },
+    {
+      "id": 5,
+      "text": "Two souls shall meet where destiny weaves its silent thread.",
+      "category": "Love",
+      "luckyNumbers": [2, 12, 22, 32, 42]
+    },
+    {
+      "id": 6,
+      "text": "Forgiveness is the bridge between two hearts divided.",
+      "category": "Love",
+      "luckyNumbers": [8, 16, 24, 32, 40]
+    },
+    {
+      "id": 7,
+      "text": "Your boldest career move awaits at the edge of your comfort zone.",
+      "category": "Career",
+      "luckyNumbers": [4, 13, 22, 31, 40]
+    },
+    {
+      "id": 8,
+      "text": "A mentor appears when the student is truly ready to listen.",
+      "category": "Career",
+      "luckyNumbers": [6, 16, 26, 36, 46]
+    },
+    {
+      "id": 9,
+      "text": "The opportunity disguised as hard work will reveal its treasure.",
+      "category": "Career",
+      "luckyNumbers": [10, 20, 30, 40, 50]
+    },
+    {
+      "id": 10,
+      "text": "Your unique gifts will open doors that no key could unlock.",
+      "category": "Career",
+      "luckyNumbers": [3, 7, 14, 21, 42]
+    },
+    {
+      "id": 11,
+      "text": "Perseverance transforms the impossible into the inevitable.",
+      "category": "Career",
+      "luckyNumbers": [9, 18, 27, 36, 45]
+    },
+    {
+      "id": 12,
+      "text": "A new partnership will multiply your efforts tenfold.",
+      "category": "Career",
+      "luckyNumbers": [5, 10, 15, 20, 25]
+    },
+    {
+      "id": 13,
+      "text": "The project you fear most holds your greatest breakthrough.",
+      "category": "Career",
+      "luckyNumbers": [11, 22, 33, 44, 55]
+    },
+    {
+      "id": 14,
+      "text": "Your body is a temple — honor it and it shall serve you well.",
+      "category": "Health",
+      "luckyNumbers": [2, 8, 16, 32, 48]
+    },
+    {
+      "id": 15,
+      "text": "Rest is not weakness; it is the soil in which strength grows.",
+      "category": "Health",
+      "luckyNumbers": [4, 12, 20, 28, 36]
+    },
+    {
+      "id": 16,
+      "text": "A small change in daily habit will yield a lifetime of vitality.",
+      "category": "Health",
+      "luckyNumbers": [7, 17, 27, 37, 47]
+    },
+    {
+      "id": 17,
+      "text": "The healing you seek begins with the acceptance of what is.",
+      "category": "Health",
+      "luckyNumbers": [1, 5, 13, 21, 34]
+    },
+    {
+      "id": 18,
+      "text": "Movement is medicine; let your feet carry your burdens away.",
+      "category": "Health",
+      "luckyNumbers": [6, 15, 24, 33, 42]
+    },
+    {
+      "id": 19,
+      "text": "The mind and body are one; heal your thoughts to mend your form.",
+      "category": "Health",
+      "luckyNumbers": [3, 11, 19, 38, 49]
+    },
+    {
+      "id": 20,
+      "text": "An unexpected windfall arrives on a day you least expect.",
+      "category": "Wealth",
+      "luckyNumbers": [8, 18, 28, 38, 48]
+    },
+    {
+      "id": 21,
+      "text": "Your investment of time will return tenfold in golden reward.",
+      "category": "Wealth",
+      "luckyNumbers": [1, 4, 9, 16, 25]
+    },
+    {
+      "id": 22,
+      "text": "The river of abundance flows toward those who prepare its banks.",
+      "category": "Wealth",
+      "luckyNumbers": [7, 14, 28, 42, 56]
+    },
+    {
+      "id": 23,
+      "text": "Share generously and the universe shall multiply your gifts.",
+      "category": "Wealth",
+      "luckyNumbers": [2, 6, 10, 18, 30]
+    },
+    {
+      "id": 24,
+      "text": "A dormant asset awakens; look where you have not looked before.",
+      "category": "Wealth",
+      "luckyNumbers": [5, 19, 23, 41, 50]
+    },
+    {
+      "id": 25,
+      "text": "Patience is the currency that purchases extraordinary fortune.",
+      "category": "Wealth",
+      "luckyNumbers": [9, 21, 33, 45, 57]
+    },
+    {
+      "id": 26,
+      "text": "The answer you seek lives in the question you dare not ask.",
+      "category": "Wisdom",
+      "luckyNumbers": [3, 14, 25, 36, 47]
+    },
+    {
+      "id": 27,
+      "text": "True wisdom is knowing what you do not know.",
+      "category": "Wisdom",
+      "luckyNumbers": [1, 2, 3, 5, 8]
+    },
+    {
+      "id": 28,
+      "text": "The obstacle before you is the path through which greatness enters.",
+      "category": "Wisdom",
+      "luckyNumbers": [13, 26, 39, 52, 65]
+    },
+    {
+      "id": 29,
+      "text": "Silence speaks truths that words cannot contain.",
+      "category": "Wisdom",
+      "luckyNumbers": [4, 8, 15, 16, 23]
+    },
+    {
+      "id": 30,
+      "text": "The one who bends like a willow outlasts the one who stands rigid as oak.",
+      "category": "Wisdom",
+      "luckyNumbers": [6, 12, 18, 24, 30]
+    },
+    {
+      "id": 31,
+      "text": "Every ending carries within it the seed of a magnificent beginning.",
+      "category": "Wisdom",
+      "luckyNumbers": [7, 11, 13, 17, 19]
+    },
+    {
+      "id": 32,
+      "text": "The stars align tonight to grant a wish long carried in your heart.",
+      "category": "Love",
+      "luckyNumbers": [5, 10, 20, 40, 80]
+    },
+    {
+      "id": 33,
+      "text": "Your next chapter begins with a single courageous step.",
+      "category": "Career",
+      "luckyNumbers": [1, 3, 7, 21, 42]
+    },
+    {
+      "id": 34,
+      "text": "Laughter is the most ancient and powerful medicine.",
+      "category": "Health",
+      "luckyNumbers": [2, 4, 8, 16, 32]
+    },
+    {
+      "id": 35,
+      "text": "Wealth is not measured in coins but in the richness of experience.",
+      "category": "Wealth",
+      "luckyNumbers": [11, 22, 33, 44, 55]
+    }
+  ],
+  "categories": [
+    { "name": "Love", "emoji": "💖" },
+    { "name": "Career", "emoji": "⚡" },
+    { "name": "Health", "emoji": "🌿" },
+    { "name": "Wealth", "emoji": "✨" },
+    { "name": "Wisdom", "emoji": "🔮" }
+  ]
+}
