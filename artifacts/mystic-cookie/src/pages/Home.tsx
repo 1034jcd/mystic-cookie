@@ -419,6 +419,14 @@ export default function Home() {
           onUnlockSuccess={() => setWeeklyUnlocked(true)}
         />
       </div>
+
+      {/* BrainAdvisor family footer */}
+      <div className="z-20 flex items-center justify-center gap-2 mt-2 pb-8 opacity-80">
+        <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" className="w-6 h-6 rounded" />
+        <span className="text-xs text-muted-foreground font-mono tracking-wide">
+          A BrainAdvisor creation
+        </span>
+      </div>
     </div>
   );
 }

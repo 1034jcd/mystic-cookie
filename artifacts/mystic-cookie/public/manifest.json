@@ -1,16 +1,12 @@
 {
-  "name": "Mystic Cookie",
-  "short_name": "Mystic",
-  "description": "A mystical, dark-themed fortune cookie web app.",
+  "name": "Mystic Cookie — by BrainAdvisor",
+  "short_name": "Mystic Cookie",
+  "description": "A mystical, dark-themed fortune cookie web app from the BrainAdvisor family.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0f",
   "theme_color": "#d4af74",
   "icons": [
-    {
-      "src": "/favicon.svg",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml"
-    }
+    { "src": "/brainadvisor-logo.svg", "sizes": "192x192 512x512", "type": "image/svg+xml" }
   ]
 }
