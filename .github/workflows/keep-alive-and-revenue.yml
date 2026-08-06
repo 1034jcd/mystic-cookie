@@ -102,7 +102,6 @@ jobs:
             const fs=require('fs');
             let a={}; try { a=JSON.parse(fs.readFileSync('/tmp/audit.json','utf8')); } catch(e) { console.log('audit json unreadable', e.message); }
             const meta=(a.metadata&&a.metadata.vulnerabilities)||{};
-            const meta=(a.metadata&&a.metadata.vulnerabilities)||{};
             const high=(meta.high||0)+(meta.critical||0);
             console.log('audit: high+critical='+high, JSON.stringify(meta));
             if(high>0 && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.REPORT_TO){
