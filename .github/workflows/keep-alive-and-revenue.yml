@@ -45,4 +45,4 @@ jobs:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           REPORT_TO: ${{ secrets.ADMIN_EMAIL }}
-        run: NODE_PATH=/tmp/revenue-deps/node_modules node scripts/revenue-report.js
+        run: NODE_PATH=/tmp/revenue-deps/node_modules node scripts/revenue-report.cjs
