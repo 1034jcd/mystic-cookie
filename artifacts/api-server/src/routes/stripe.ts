@@ -80,6 +80,7 @@ router.post("/stripe/checkout", checkoutLimiter, async (req, res) => {
       success_url: `${baseUrl}/paid?session_id={CHECKOUT_SESSION_ID}&mode=${mode ?? "single"}`,
       cancel_url: `${baseUrl}/`,
       metadata: { app: "mystic-cookie", mode: mode ?? "single" },
+      managed_payments: { enabled: false },
     });
     res.json({ ok: true, url: session.url });
   } catch (err) {

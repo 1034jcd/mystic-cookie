@@ -15,7 +15,7 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           REPORT_TO: ${{ secrets.ADMIN_EMAIL }}
         run: |
-          code=$(curl -s -o /dev/null -w '%{http_code}' -m 25 https://mystic-cookie.onrender.com/api/health || echo DOWN)
+          code=$(curl -s -o /dev/null -w '%{http_code}' -m 25 https://mystic-cookie.onrender.com/api/healthz || echo DOWN)
           echo "mystic-cookie -> $code"
           export CODE_VAR="$code"
           if [ "$code" != "200" ]; then
