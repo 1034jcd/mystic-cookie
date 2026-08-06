@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install deps
-        run: corepack enable && pnpm install --frozen-lockfile --ignore-scripts --prod --no-audit --no-fund
+        run: npx --yes pnpm@9 install --frozen-lockfile --ignore-scripts --prod --no-audit --no-fund
       - name: Send daily revenue report
         env:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
