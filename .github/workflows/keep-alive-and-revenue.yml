@@ -1,7 +1,7 @@
 name: Mystic Cookie ops (keep-alive, alerts, revenue)
 on:
   schedule:
-    - cron: '*/15 * * * *'   # keep-alive ping
+    - cron: '*/10 * * * *'   # keep-alive ping
     - cron: '45 8 * * *'     # daily revenue email
   workflow_dispatch: {}
 
@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install deps
-        run: npm ci --omit=dev 2>/dev/null || npm install --omit=dev --no-audit --no-fund
+        run: corepack enable && pnpm install --frozen-lockfile --ignore-scripts --prod --no-audit --no-fund
       - name: Send daily revenue report
         env:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}

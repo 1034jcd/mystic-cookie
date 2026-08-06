@@ -22,4 +22,13 @@ app.listen(port, (err) => {
   }
 
   logger.info({ port }, "Server listening");
+
+  // Self keep-alive: keep the free-tier instance warm without external cron.
+  const selfUrl = process.env["PUBLIC_BASE_URL"] ?? "";
+  if (selfUrl) {
+    setInterval(() => {
+      fetch(`${selfUrl}/api/health`).catch(() => {});
+    }, 10 * 60 * 1000);
+    logger.info({ selfUrl }, "Self keep-alive enabled");
+  }
 });
