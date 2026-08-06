@@ -1,7 +1,8 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Sparkles, Infinity as InfinityIcon, CalendarDays, AlertTriangle, Lock, ShieldCheck, HeartHandshake } from "lucide-react";
+import { Loader2, Sparkles, Infinity as InfinityIcon, CalendarDays, AlertTriangle, Lock, ShieldCheck, HeartHandshake, Mail } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,6 +19,7 @@ type CheckoutMode = "single" | "monthly" | "yearly";
 export function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
   const { toast } = useToast();
   const [checkingOut, setCheckingOut] = useState<CheckoutMode | null>(null);
+  const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   async function startCheckout(mode: CheckoutMode) {
@@ -27,7 +29,7 @@ export function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode }),
+        body: JSON.stringify({ mode, email: email.trim() || undefined }),
       });
       const data = await res.json();
       if (data.url) {
@@ -68,6 +70,22 @@ export function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
           )}
 
           <div className="w-full space-y-3">
+            <div className="space-y-1.5">
+              <label htmlFor="buyer-email" className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
+                <Mail className="w-3.5 h-3.5" />
+                Your email <span className="text-muted-foreground/60 font-normal">(your fortune is delivered here)</span>
+              </label>
+              <Input
+                id="buyer-email"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                placeholder="you@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-11 bg-background/60 border-card-border text-card-foreground"
+              />
+            </div>
             <Button
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold h-14"
               size="lg"
@@ -130,6 +148,10 @@ export function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
                 <span className="text-[10px] text-muted-foreground leading-tight block">Love it or refund</span>
               </div>
             </div>
+
+            <p className="text-center text-[10px] text-muted-foreground/70 leading-relaxed">
+              For entertainment purposes only. Lucky numbers are not affiliated with or endorsed by any lottery or gambling operator.
+            </p>
           </div>
         </div>
       </DialogContent>

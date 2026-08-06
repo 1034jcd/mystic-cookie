@@ -52,7 +52,7 @@ function log(
 
 // ── Create a Stripe Checkout session ──────────────────────────────────────────
 router.post("/stripe/checkout", checkoutLimiter, async (req, res) => {
-  const { mode } = (req.body ?? {}) as { mode?: "single" | "monthly" | "yearly" };
+  const { mode, email } = (req.body ?? {}) as { mode?: "single" | "monthly" | "yearly"; email?: string };
   let isSubscription = false;
   let price = priceSingle;
   if (mode === "monthly") {
@@ -79,7 +79,8 @@ router.post("/stripe/checkout", checkoutLimiter, async (req, res) => {
       line_items: [{ price, quantity: 1 }],
       success_url: `${baseUrl}/paid?session_id={CHECKOUT_SESSION_ID}&mode=${mode ?? "single"}`,
       cancel_url: `${baseUrl}/`,
-      metadata: { app: "mystic-cookie", mode: mode ?? "single" },
+      customer_email: email && email.includes("@") ? email.trim() : undefined,
+      metadata: { app: "mystic-cookie", mode: mode ?? "single", email: email ?? "" },
       managed_payments: { enabled: false },
     });
     res.json({ ok: true, url: session.url });

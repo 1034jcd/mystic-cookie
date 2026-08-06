@@ -446,11 +446,19 @@ export default function Home() {
       </div>
 
       {/* BrainAdvisor family footer */}
-      <div className="z-20 flex items-center justify-center gap-2 mt-2 pb-8 opacity-80">
-        <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" className="w-6 h-6 rounded" />
-        <span className="text-xs text-muted-foreground font-mono tracking-wide">
-          A BrainAdvisor creation
-        </span>
+      <div className="z-20 flex flex-col items-center justify-center gap-2 mt-2 pb-8 opacity-90 text-center px-4">
+        <div className="flex items-center justify-center gap-2">
+          <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" className="w-6 h-6 rounded" />
+          <span className="text-xs text-muted-foreground font-mono tracking-wide">
+            A BrainAdvisor creation
+          </span>
+        </div>
+        <p className="text-[11px] text-muted-foreground/80 max-w-md leading-relaxed">
+          For entertainment purposes only. Lucky numbers are not affiliated with or endorsed by any lottery or gambling operator.
+        </p>
+        <a href="/legal" className="text-xs text-primary/80 hover:text-primary underline underline-offset-2">
+          Legal &amp; Disclaimers
+        </a>
       </div>
     </div>
   );

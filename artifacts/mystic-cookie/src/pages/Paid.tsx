@@ -38,6 +38,10 @@ export function PaidPage() {
             Return to the Cookie
           </Button>
         </Link>
+        <p className="text-xs text-muted-foreground/70 leading-relaxed">
+          For entertainment purposes only. Not affiliated with any lottery or gambling operator.
+          Refund policy: love it or refund within 14 days — <a href="/legal" className="underline underline-offset-2">full disclaimers</a>.
+        </p>
       </motion.div>
     </div>
   );

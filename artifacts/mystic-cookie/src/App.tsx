@@ -7,6 +7,7 @@ import { AnimatePresence } from "framer-motion";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import { PaidPage } from "@/pages/Paid";
+import { LegalPage } from "@/pages/Legal";
 import { SplashScreen } from "@/components/SplashScreen";
 
 const queryClient = new QueryClient();
@@ -16,6 +17,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/paid" component={PaidPage} />
+      <Route path="/legal" component={LegalPage} />
       <Route component={NotFound} />
     </Switch>
   );
