@@ -51,6 +51,7 @@ function stripe(path) {
     port: parseInt(process.env.SMTP_PORT || '587'), secure: false,
     auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
   });
+  try {
   await transporter.sendMail({
     from: process.env.SMTP_USER,
     to: REPORT_TO,
@@ -58,4 +59,7 @@ function stripe(path) {
     text: lines.join('\n')
   });
   console.log('Email sent to', REPORT_TO);
+  } catch (e) {
+    console.error('SMTP warning (email not sent):', e.message);
+  }
 })().catch(e => { console.error(e); process.exit(1); });
