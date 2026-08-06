@@ -90,6 +90,10 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9
+      - name: Install deps
+        run: |
+          mkdir -p /tmp/revenue-deps
+          npm install --prefix /tmp/revenue-deps nodemailer --no-save --no-audit --no-fund
       - name: Audit dependencies
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
@@ -98,7 +102,7 @@ jobs:
         run: |
           pnpm install --frozen-lockfile --ignore-scripts --silent || true
           pnpm audit --json > /tmp/audit.json 2>/dev/null || true
-          node -e "
+          NODE_PATH=/tmp/revenue-deps/node_modules node -e "
             const fs=require('fs');
             let a={}; try { a=JSON.parse(fs.readFileSync('/tmp/audit.json','utf8')); } catch(e) { console.log('audit json unreadable', e.message); }
             const meta=(a.metadata&&a.metadata.vulnerabilities)||{};
