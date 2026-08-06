@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Loader2, Sparkles, Infinity as InfinityIcon, AlertTriangle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Loader2, Sparkles, Infinity as InfinityIcon, CalendarDays, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,12 +13,14 @@ interface PaymentModalProps {
   onPaid: () => void;
 }
 
-export function PaymentModal({ open, onOpenChange, amount }: PaymentModalProps) {
+type CheckoutMode = "single" | "monthly" | "yearly";
+
+export function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
   const { toast } = useToast();
-  const [checkingOut, setCheckingOut] = useState<"single" | "monthly" | null>(null);
+  const [checkingOut, setCheckingOut] = useState<CheckoutMode | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function startCheckout(mode: "single" | "monthly") {
+  async function startCheckout(mode: CheckoutMode) {
     setCheckingOut(mode);
     setError(null);
     try {
@@ -76,17 +79,8 @@ export function PaymentModal({ open, onOpenChange, amount }: PaymentModalProps) 
               ) : (
                 <Sparkles className="w-4 h-4 mr-2" />
               )}
-              Unlock This Fortune — $0.99
+              Unlock This Fortune — $1.99
             </Button>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-border/40" />
-              </div>
-              <div className="relative flex justify-center">
-                <span className="bg-card px-3 text-xs text-muted-foreground font-mono">or</span>
-              </div>
-            </div>
 
             <Button
               variant="outline"
@@ -101,6 +95,22 @@ export function PaymentModal({ open, onOpenChange, amount }: PaymentModalProps) 
                 <InfinityIcon className="w-4 h-4 mr-2" />
               )}
               Monthly Unlimited — $4.99/mo
+            </Button>
+
+            <Button
+              variant="outline"
+              className="w-full border-secondary/50 text-secondary hover:bg-secondary/10 font-semibold h-14"
+              size="lg"
+              onClick={() => startCheckout("yearly")}
+              disabled={checkingOut !== null}
+            >
+              {checkingOut === "yearly" ? (
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              ) : (
+                <CalendarDays className="w-4 h-4 mr-2" />
+              )}
+              Yearly Unlimited — $29.99/yr
+              <Badge className="ml-2 bg-secondary/20 text-secondary border-secondary/40">BEST VALUE</Badge>
             </Button>
             <p className="text-center text-xs text-muted-foreground">
               Cancel anytime. Secure checkout via Stripe.

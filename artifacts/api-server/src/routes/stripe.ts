@@ -7,6 +7,7 @@ const secretKey = process.env["STRIPE_SECRET_KEY"] ?? "";
 const webhookSecret = process.env["STRIPE_WEBHOOK_SECRET"] ?? "";
 const priceSingle = process.env["STRIPE_PRICE_SINGLE"] ?? "";
 const priceMonthly = process.env["STRIPE_PRICE_MONTHLY"] ?? "";
+const priceYearly = process.env["STRIPE_PRICE_YEARLY"] ?? "";
 
 const stripe = new Stripe(secretKey);
 
@@ -41,9 +42,16 @@ function log(
 
 // ── Create a Stripe Checkout session ──────────────────────────────────────────
 router.post("/stripe/checkout", async (req, res) => {
-  const { mode } = (req.body ?? {}) as { mode?: "single" | "monthly" };
-  const isMonthly = mode === "monthly";
-  const price = isMonthly ? priceMonthly : priceSingle;
+  const { mode } = (req.body ?? {}) as { mode?: "single" | "monthly" | "yearly" };
+  let isSubscription = false;
+  let price = priceSingle;
+  if (mode === "monthly") {
+    isSubscription = true;
+    price = priceMonthly;
+  } else if (mode === "yearly") {
+    isSubscription = true;
+    price = priceYearly;
+  }
 
   if (!secretKey) {
     res.status(500).json({ ok: false, message: "Payments are not configured yet." });
@@ -57,11 +65,11 @@ router.post("/stripe/checkout", async (req, res) => {
   const baseUrl = getBaseUrl(req);
   try {
     const session = await stripe.checkout.sessions.create({
-      mode: isMonthly ? "subscription" : "payment",
+      mode: isSubscription ? "subscription" : "payment",
       line_items: [{ price, quantity: 1 }],
-      success_url: `${baseUrl}/paid?session_id={CHECKOUT_SESSION_ID}&mode=${isMonthly ? "monthly" : "single"}`,
+      success_url: `${baseUrl}/paid?session_id={CHECKOUT_SESSION_ID}&mode=${mode ?? "single"}`,
       cancel_url: `${baseUrl}/`,
-      metadata: { app: "mystic-cookie", mode: isMonthly ? "monthly" : "single" },
+      metadata: { app: "mystic-cookie", mode: mode ?? "single" },
     });
     res.json({ ok: true, url: session.url });
   } catch (err) {
