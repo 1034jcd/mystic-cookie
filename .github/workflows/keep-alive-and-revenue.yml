@@ -16,14 +16,14 @@ jobs:
       - name: Install deps
         run: |
           mkdir -p /tmp/mkt-deps
-          npm install --prefix /tmp/mkt-deps nodemailer --no-save --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund nodemailer
       - name: Social listening + daily hooks
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
-        run: NODE_PATH=/tmp/mkt-deps/node_modules node scripts/social-listen.cjs
+        run: node scripts/social-listen.cjs
 
   security-scan:
     runs-on: ubuntu-latest
@@ -33,13 +33,13 @@ jobs:
       - name: Install deps
         run: |
           mkdir -p /tmp/sec-deps
-          npm install --prefix /tmp/sec-deps nodemailer --no-save --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund nodemailer
       - name: Scan for leaked secrets
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
-        run: NODE_PATH=/tmp/sec-deps/node_modules node scripts/security-scan.cjs || true
+        run: node scripts/security-scan.cjs || true
 
   keep-alive:
     runs-on: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
       - name: Install deps
         run: |
           mkdir -p /tmp/revenue-deps
-          npm install --prefix /tmp/revenue-deps nodemailer --no-save --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund nodemailer
       - name: Ping all BrainAdvisor apps and alert on failure
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
@@ -70,7 +70,7 @@ jobs:
             echo "DOWN APPS:$down"
             export DOWN_VAR="$down"
             if [ -n "$SMTP_USER" ] && [ -n "$SMTP_PASS" ] && [ -n "$REPORT_TO" ]; then
-              NODE_PATH=/tmp/revenue-deps/node_modules node -e "
+              node -e "
                 const nm=require('nodemailer');
                 const t=nm.createTransport({host:'smtp.gmail.com',port:587,secure:false,auth:{user:process.env.SMTP_USER,pass:process.env.SMTP_PASS}});
                 t.sendMail({from:process.env.SMTP_USER,to:process.env.REPORT_TO,subject:'DOWN ALERT: BrainAdvisor apps',text:'Health check failed for:'+process.env.DOWN_VAR}).then(()=>console.log('alert sent')).catch(e=>console.error('alert email failed',e.message));
@@ -87,14 +87,14 @@ jobs:
       - name: Install deps
         run: |
           mkdir -p /tmp/revenue-deps
-          npm install --prefix /tmp/revenue-deps nodemailer --no-save --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund nodemailer
       - name: Send daily revenue report
         env:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           REPORT_TO: ${{ secrets.ADMIN_EMAIL }}
-        run: NODE_PATH=/tmp/revenue-deps/node_modules node scripts/revenue-report.cjs
+        run: node scripts/revenue-report.cjs
 
   abandoned-recovery:
     runs-on: ubuntu-latest
@@ -104,7 +104,7 @@ jobs:
       - name: Install deps
         run: |
           mkdir -p /tmp/revenue-deps
-          npm install --prefix /tmp/revenue-deps nodemailer --no-save --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund nodemailer
       - name: Send abandoned-checkout reminders
         env:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
@@ -112,7 +112,7 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
           EXCLUDE_EMAILS: ${{ secrets.ADMIN_EMAIL }}
-        run: NODE_PATH=/tmp/revenue-deps/node_modules node scripts/abandoned-recovery.cjs
+        run: node scripts/abandoned-recovery.cjs
 
   weekly-audit:
     runs-on: ubuntu-latest
@@ -126,7 +126,7 @@ jobs:
       - name: Install deps
         run: |
           mkdir -p /tmp/revenue-deps
-          npm install --prefix /tmp/revenue-deps nodemailer --no-save --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund nodemailer
       - name: Audit dependencies
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
@@ -135,4 +135,4 @@ jobs:
         run: |
           pnpm install --frozen-lockfile --ignore-scripts --silent || true
           pnpm audit --json > /tmp/audit.json 2>/dev/null || true
-          NODE_PATH=/tmp/revenue-deps/node_modules node scripts/deps-audit.cjs
+          node scripts/deps-audit.cjs
