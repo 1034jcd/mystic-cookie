@@ -21,7 +21,7 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           REPORT_TO: ${{ secrets.ADMIN_EMAIL }}
         run: |
-          urls="https://mystic-cookie.onrender.com/api/healthz https://brainadvisor.onrender.com https://brainapi-1bcu.onrender.com https://brainb2b.onrender.com"
+          urls="https://mystic-cookie.onrender.com/api/healthz https://brainadvisor.onrender.com https://brainapi-1bcu.onrender.com https://brainb2b.onrender.com https://braindocs-7qqx.onrender.com/api/healthz"
           down=""
           for u in $urls; do
             code=$(curl -s -o /dev/null -w '%{http_code}' -m 45 "$u" || echo DOWN)
