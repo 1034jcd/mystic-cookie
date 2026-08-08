@@ -1,7 +1,7 @@
 name: Mystic Cookie ops (keep-alive, alerts, revenue, recovery, audit)
 on:
   schedule:
-    - cron: '*/10 * * * *'   # keep-alive ping (all apps)
+    - cron: '*/5 * * * *'    # keep-alive ping (all apps, every 5 min)
     - cron: '45 8 * * *'     # daily revenue email
     - cron: '30 13 * * *'    # daily abandoned-checkout recovery
     - cron: '0 9 * * 1'      # weekly dependency security audit
