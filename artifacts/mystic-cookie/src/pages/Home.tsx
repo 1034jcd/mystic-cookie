@@ -222,14 +222,25 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center z-20 mt-12 mb-8"
       >
-        <h1 className="text-gold-shimmer text-4xl md:text-6xl font-serif mb-3">
+        <motion.div
+          initial={{ opacity: 0, letterSpacing: "0.1em" }}
+          animate={{ opacity: 1, letterSpacing: "0.42em" }}
+          transition={{ duration: 1.4, ease: "easeOut" }}
+          className="eyebrow-luxe mb-4 flex items-center justify-center gap-3"
+        >
+          <span className="w-8 h-px bg-gradient-to-r from-transparent to-primary/60" />
+          Oracle of Fortune
+          <span className="w-8 h-px bg-gradient-to-l from-transparent to-primary/60" />
+        </motion.div>
+        <h1 className="text-gold-shimmer glow-gold text-4xl md:text-6xl font-serif mb-3">
           Mystic Cookie
         </h1>
-        <p className="text-muted-foreground tracking-widest text-sm md:text-base uppercase flex items-center justify-center gap-2 mb-5">
+        <p className="text-muted-foreground tracking-widest text-sm md:text-base uppercase flex items-center justify-center gap-2 mb-4">
           <MoonStar className="w-4 h-4 text-primary/70" />
           Seek your destiny
           <MoonStar className="w-4 h-4 text-primary/70" />
         </p>
+        <div className="divider-gold mb-5"><span className="diamond" /></div>
         <motion.p
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
@@ -241,6 +252,29 @@ export default function Home() {
           and applied through steady focus and daily meditation, each word carries
           the power to shift the course of your life in profound and lasting ways.
         </motion.p>
+      </motion.div>
+
+      {/* The Ritual */}
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.8 }}
+        className="z-20 w-full max-w-2xl px-4 mb-10"
+      >
+        <div className="card-premium rounded-2xl px-5 py-4 grid grid-cols-3 gap-2 text-center">
+          {[
+            { icon: '🥠', t: 'Crack', d: 'a fresh fortune' },
+            { icon: '✨', t: 'Receive', d: 'wisdom + numbers' },
+            { icon: '📜', t: 'Keep', d: 'save & share the omen' },
+          ].map((s2, i) => (
+            <div key={s2.t} className="flex flex-col items-center gap-1 relative">
+              {i < 2 && <span className="hidden md:block absolute top-1/2 right-[-6px] w-3 h-px bg-primary/40" />}
+              <span className="text-xl leading-none">{s2.icon}</span>
+              <span className="text-[11px] uppercase tracking-[0.25em] text-primary/90 font-semibold">{s2.t}</span>
+              <span className="text-[10px] text-muted-foreground">{s2.d}</span>
+            </div>
+          ))}
+        </div>
       </motion.div>
 
       {/* Category Selector */}
@@ -373,8 +407,7 @@ export default function Home() {
               <>
                 <Button 
                   size="lg"
-                  variant="outline"
-                  className="flex-1 border-primary text-primary hover:bg-primary/10 shadow-[0_0_15px_rgba(212,175,116,0.1)] font-semibold shine-button"
+                  className="flex-1 btn-gold font-bold shine-button"
                   onClick={() => {
                     setPaymentIntent("random");
                     setPaymentAmount("0.99");
@@ -382,7 +415,7 @@ export default function Home() {
                   }}
                 >
                   <Zap className="w-5 h-5 mr-2" />
-                  Crack a Fortune ($1.99)
+                  Crack a Fortune — $1.99
                 </Button>
                 
                 <Button 
@@ -446,19 +479,23 @@ export default function Home() {
       </div>
 
       {/* BrainAdvisor family footer */}
-      <div className="z-20 flex flex-col items-center justify-center gap-2 mt-2 pb-8 opacity-90 text-center px-4">
+      <div className="z-20 flex flex-col items-center justify-center gap-3 mt-6 pt-8 pb-8 border-t border-border/40 text-center px-4 w-full max-w-2xl">
+        <div className="divider-gold mb-1"><span className="diamond" /></div>
         <div className="flex items-center justify-center gap-2">
-          <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" className="w-6 h-6 rounded" />
-          <span className="text-xs text-muted-foreground font-mono tracking-wide">
-            A BrainAdvisor creation
+          <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" className="w-6 h-6 rounded shadow-[0_0_12px_rgba(212,175,116,0.35)]" />
+          <span className="text-xs text-muted-foreground font-mono tracking-[0.2em] uppercase">
+            Crafted by BrainAdvisor
           </span>
         </div>
         <p className="text-[11px] text-muted-foreground/80 max-w-md leading-relaxed">
           For entertainment purposes only. Lucky numbers are not affiliated with or endorsed by any lottery or gambling operator.
         </p>
-        <a href="/legal" className="text-xs text-primary/80 hover:text-primary underline underline-offset-2">
-          Legal &amp; Disclaimers
-        </a>
+        <div className="flex items-center gap-4">
+          <a href="/legal" className="text-xs text-primary/80 hover:text-primary underline underline-offset-2">
+            Legal &amp; Disclaimers
+          </a>
+          <span className="text-[11px] text-muted-foreground/60">© 2026 Mystic Cookie</span>
+        </div>
       </div>
     </div>
   );

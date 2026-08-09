@@ -48,7 +48,10 @@ export function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md bg-card border-card-border text-card-foreground shadow-[0_0_40px_rgba(0,0,0,0.5)]">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-serif text-primary text-center">Offering Required</DialogTitle>
+          <div className="mx-auto mb-1 w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-b from-primary/30 to-transparent border border-primary/40 shadow-[0_0_24px_rgba(212,175,116,0.35)]">
+            <Sparkles className="w-5 h-5 text-primary glow-gold" />
+          </div>
+          <DialogTitle className="text-2xl font-serif text-gold-shimmer text-center">The Offering</DialogTitle>
           <DialogDescription className="text-center text-muted-foreground">
             The oracle accepts tribute through secure payment. Choose your offering.
           </DialogDescription>
@@ -86,50 +89,73 @@ export function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
                 className="h-11 bg-background/60 border-card-border text-card-foreground"
               />
             </div>
-            <Button
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold h-14"
-              size="lg"
-              onClick={() => startCheckout("single")}
-              disabled={checkingOut !== null}
-            >
-              {checkingOut === "single" ? (
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : (
-                <Sparkles className="w-4 h-4 mr-2" />
-              )}
-              Unlock This Fortune — $1.99
-            </Button>
+            <div className="card-premium rounded-xl p-3">
+              <div className="flex items-baseline justify-between mb-1">
+                <span className="text-sm font-semibold text-foreground">One Fortune</span>
+                <span className="text-xl font-serif text-primary">$1.99</span>
+              </div>
+              <p className="text-[11px] text-muted-foreground mb-3">Unlock this fortune instantly, no account needed.</p>
+              <Button
+                className="w-full btn-gold font-bold h-12"
+                size="lg"
+                onClick={() => startCheckout("single")}
+                disabled={checkingOut !== null}
+              >
+                {checkingOut === "single" ? (
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                ) : (
+                  <Sparkles className="w-4 h-4 mr-2" />
+                )}
+                Unlock Now
+              </Button>
+            </div>
 
-            <Button
-              variant="outline"
-              className="w-full border-primary/40 text-primary hover:bg-primary/10 font-semibold h-14"
-              size="lg"
-              onClick={() => startCheckout("monthly")}
-              disabled={checkingOut !== null}
-            >
-              {checkingOut === "monthly" ? (
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : (
-                <InfinityIcon className="w-4 h-4 mr-2" />
-              )}
-              Monthly Unlimited — $4.99/mo
-            </Button>
+            <div className="card-premium rounded-xl p-3">
+              <div className="flex items-baseline justify-between mb-1">
+                <span className="text-sm font-semibold text-foreground">Monthly Unlimited</span>
+                <span className="text-xl font-serif text-primary">$4.99<span className="text-xs text-muted-foreground">/mo</span></span>
+              </div>
+              <p className="text-[11px] text-muted-foreground mb-3">Crack a new fortune every day. Cancel anytime.</p>
+              <Button
+                variant="outline"
+                className="w-full border-primary/40 text-primary hover:bg-primary/10 font-semibold h-12"
+                size="lg"
+                onClick={() => startCheckout("monthly")}
+                disabled={checkingOut !== null}
+              >
+                {checkingOut === "monthly" ? (
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                ) : (
+                  <InfinityIcon className="w-4 h-4 mr-2" />
+                )}
+                Go Unlimited
+              </Button>
+            </div>
 
-            <Button
-              variant="outline"
-              className="w-full border-secondary/50 text-secondary hover:bg-secondary/10 font-semibold h-14"
-              size="lg"
-              onClick={() => startCheckout("yearly")}
-              disabled={checkingOut !== null}
-            >
-              {checkingOut === "yearly" ? (
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : (
-                <CalendarDays className="w-4 h-4 mr-2" />
-              )}
-              Yearly Unlimited — $29.99/yr
-              <Badge className="ml-2 bg-secondary/20 text-secondary border-secondary/40">BEST VALUE</Badge>
-            </Button>
+            <div className="rounded-xl p-3 border border-secondary/40 bg-gradient-to-b from-secondary/10 to-transparent">
+              <div className="flex items-baseline justify-between mb-1">
+                <span className="text-sm font-semibold text-foreground flex items-center gap-2">
+                  Yearly Unlimited
+                  <Badge className="bg-secondary/20 text-secondary border-secondary/40">BEST VALUE</Badge>
+                </span>
+                <span className="text-xl font-serif text-secondary">$29.99<span className="text-xs text-muted-foreground">/yr</span></span>
+              </div>
+              <p className="text-[11px] text-muted-foreground mb-3">Unlimited for a full year — that's 2 months free.</p>
+              <Button
+                variant="outline"
+                className="w-full border-secondary/50 text-secondary hover:bg-secondary/10 font-semibold h-12"
+                size="lg"
+                onClick={() => startCheckout("yearly")}
+                disabled={checkingOut !== null}
+              >
+                {checkingOut === "yearly" ? (
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                ) : (
+                  <CalendarDays className="w-4 h-4 mr-2" />
+                )}
+                Commit to the Year
+              </Button>
+            </div>
             <p className="text-center text-xs text-muted-foreground">
               Cancel anytime. Secure checkout via Stripe.
             </p>
