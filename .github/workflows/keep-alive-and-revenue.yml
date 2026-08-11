@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '45 8 * * *' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install deps
         run: |
           mkdir -p /tmp/mkt-deps
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '0 9 * * 1' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install deps
         run: |
           mkdir -p /tmp/sec-deps
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '45 8 * * *' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install deps
         run: |
           mkdir -p /tmp/revenue-deps
@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '30 13 * * *' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install deps
         run: |
           mkdir -p /tmp/revenue-deps
@@ -118,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '0 9 * * 1' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
