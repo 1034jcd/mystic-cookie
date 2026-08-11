@@ -16,7 +16,7 @@ interface PaymentModalProps {
 
 type CheckoutMode = "single" | "monthly" | "yearly";
 
-export function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
+export function PaymentModal({ open, onOpenChange, amount }: PaymentModalProps) {
   const { toast } = useToast();
   const [checkingOut, setCheckingOut] = useState<CheckoutMode | null>(null);
   const [email, setEmail] = useState("");
@@ -89,9 +89,14 @@ export function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
                 className="h-11 bg-background/60 border-card-border text-card-foreground"
               />
             </div>
-            <div className="card-premium rounded-xl p-3">
+            <div className="card-premium rounded-xl p-3" style={amount === "0.99" ? { boxShadow: "0 0 0 1px rgba(212,175,116,0.55), 0 0 30px rgba(212,175,116,0.28)" } : undefined}>
               <div className="flex items-baseline justify-between mb-1">
-                <span className="text-sm font-semibold text-foreground">One Fortune</span>
+                <span className="text-sm font-semibold text-foreground flex items-center gap-2">
+                  One Fortune
+                  {amount === "0.99" && (
+                    <Badge className="bg-primary/20 text-primary border-primary/40 text-[9px] tracking-wider">RECOMMENDED</Badge>
+                  )}
+                </span>
                 <span className="text-xl font-serif text-primary">$1.99</span>
               </div>
               <p className="text-[11px] text-muted-foreground mb-3">Unlock this fortune instantly, no account needed.</p>

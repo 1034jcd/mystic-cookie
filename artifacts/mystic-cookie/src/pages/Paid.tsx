@@ -14,9 +14,12 @@ export function PaidPage() {
   useEffect(() => {
     const params = new URLSearchParams(search);
     const mode = params.get("mode");
-    if (mode === "monthly" && !activated.current) {
-      activated.current = true;
+    if (activated.current) return;
+    activated.current = true;
+    if (mode === "monthly" || mode === "yearly") {
       store.setSubscriptionActive(true);
+    } else if (mode === "single") {
+      try { window.localStorage.setItem("mystic_single_unlock", "1"); } catch { /* ignore */ }
     }
   }, [search, store]);
 

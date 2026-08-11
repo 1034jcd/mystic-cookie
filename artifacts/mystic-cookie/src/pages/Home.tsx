@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Particles } from "@/components/Particles";
 import { Cookie } from "@/components/Cookie";
 import { PaymentModal } from "@/components/PaymentModal";
 import { CollectionDrawer } from "@/components/CollectionDrawer";
+import { GoldConfetti } from "@/components/GoldConfetti";
+import { ExperienceSections } from "@/components/ExperienceSections";
 import { WeeklyFortune } from "@/components/WeeklyFortune";
 import { useFortuneStore, SavedFortune } from "@/hooks/useFortuneStore";
 import { playCrackSound, playChimeSound, playPurchaseSound, setSoundEnabled } from "@/lib/audio";
@@ -33,7 +35,11 @@ export default function Home() {
   const [paymentIntent, setPaymentIntent] = useState<"random" | "subscription">("random");
   
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [soundOn, setSoundOn] = useState(true);
+  const [soundOn, setSoundOn] = useState<boolean>(() => {
+    try { return window.localStorage.getItem("mystic_sound") !== "off"; } catch { return true; }
+  });
+  const [celebration, setCelebration] = useState(0);
+  const consumedSingleRef = useRef(false);
   const [timeUntilMidnight, setTimeUntilMidnight] = useState('');
   const [weeklyUnlocked, setWeeklyUnlocked] = useState(false);
 
@@ -91,6 +97,7 @@ export default function Home() {
 
       playCrackSound();
       setIsCracked(true);
+      setCelebration((c) => c + 1);
       setCurrentFortune({
         id: fortuneData.id || Date.now(),
         text: fortuneData.text,
@@ -176,16 +183,30 @@ export default function Home() {
 
   const today = new Date().toISOString().split('T')[0];
 
+  // Consume a paid single-fortune unlock (set on /paid after a successful Stripe checkout)
+  useEffect(() => {
+    if (consumedSingleRef.current) return;
+    let flag: string | null = null;
+    try { flag = window.localStorage.getItem("mystic_single_unlock"); } catch { /* ignore */ }
+    if (flag === "1") {
+      consumedSingleRef.current = true;
+      try { window.localStorage.removeItem("mystic_single_unlock"); } catch { /* ignore */ }
+      handleCrack("random");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="min-h-[100dvh] w-full flex flex-col items-center relative overflow-x-hidden pt-12 pb-24 px-4">
       <Particles />
+      <GoldConfetti trigger={celebration} />
 
       {/* Stats Bar */}
       <div className="absolute top-4 w-full px-4 flex justify-between items-center z-30 max-w-4xl">
         <div className="glass-panel text-xs font-mono px-4 py-2 rounded-full flex gap-4 items-center">
           <span style={{ color: 'rgba(212,175,116,0.8)' }}>Cracked: {store.stats.totalCracked}</span>
           <span style={{ color: 'rgba(212,175,116,0.8)' }}>Saved: {store.savedFortunes.length}</span>
-          <span style={{ color: 'rgba(212,175,116,0.8)' }}>Streak: {store.stats.streak}🔥</span>
+          <span style={{ color: 'rgba(212,175,116,0.8)' }} className="hidden sm:inline">Streak: {store.stats.streak}🔥</span>
           {store.subscription.active && (
             <span className="text-secondary font-bold ml-1">∞ Unlimited</span>
           )}
@@ -200,6 +221,7 @@ export default function Home() {
               const newState = !soundOn;
               setSoundOn(newState);
               setSoundEnabled(newState);
+              try { window.localStorage.setItem("mystic_sound", newState ? "on" : "off"); } catch { /* ignore */ }
             }}
           >
             {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -308,6 +330,7 @@ export default function Home() {
           } else {
             // Default to daily if they haven't cracked today, otherwise ask for payment
             const today = new Date().toISOString().split('T')[0];
+
             if (store.stats.lastCrackedDate !== today) {
               handleCrack("daily");
             } else {
@@ -477,6 +500,8 @@ export default function Home() {
           onUnlockSuccess={() => setWeeklyUnlocked(true)}
         />
       </div>
+
+      <ExperienceSections />
 
       {/* BrainAdvisor family footer */}
       <div className="z-20 flex flex-col items-center justify-center gap-3 mt-6 pt-8 pb-8 border-t border-border/40 text-center px-4 w-full max-w-2xl">

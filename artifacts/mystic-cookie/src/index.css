@@ -323,3 +323,16 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+
+@media (prefers-reduced-motion: reduce) {
+  .text-gold-shimmer,
+  .shine-button::after,
+  .glow-gold,
+  .animate-float,
+  .animate-float-slow {
+    animation: none !important;
+  }
+  .text-gold-shimmer {
+    background-position: left center;
+  }
+}

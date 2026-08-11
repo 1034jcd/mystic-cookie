@@ -9,6 +9,7 @@ import Home from "@/pages/Home";
 import { PaidPage } from "@/pages/Paid";
 import { LegalPage } from "@/pages/Legal";
 import { SplashScreen } from "@/components/SplashScreen";
+import { FamilyStrip } from "@/components/FamilyStrip";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ function App() {
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <Router />
         </WouterRouter>
+        <FamilyStrip />
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
